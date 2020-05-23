@@ -1,0 +1,95 @@
+1. Create PACKAGE.JSON File using : npm init -y
+
+2. Install node modules:
+
+                        1. express : npm i express
+
+                        2. mongoose : npm i mongoose
+
+3. Create server.js file
+
+4. Inside server.js file we declare: 
+
+                        1. const express = require('express');
+
+                        2. const app = express();
+
+                        3. const Port = process.env.Port || 8080;
+
+                        4. app.listen(Port, () => console.log("Ape Handa Server Run - Port 8080"));
+
+5. Create DB folder
+
+6. Inside the DB folder create connection.js file
+
+7. Inside the connection.js file we declare:
+
+                        1. const mongoose = require('mongoose');
+
+                        2. const URI = "mongodb+srv://apeHandaUser:apeHandaUser@clusterapehanda-rqblm.mongodb.net/ApeHandaDB?retryWrites=true&w=majority";
+
+                        3. const connectDB = async()=>{
+                            await mongoose.connect(URI,{useNewUrlParser: true,useUnifiedTopology:true});
+                            console.log("Ape Handa Database connected!");
+                            }
+
+                        4. module.exports = connectDB;
+
+8. Create the connection object in server.js file:
+
+                    1. const connectDB = require('./DB/connection');
+
+                    2. connectDB();
+
+9. Inside the DB folder create feedbackModel.js file 
+
+                    # create the database collection
+                
+                1. const mongoose = require('mongoose');
+
+                2. const feedback = new mongoose.Schema(
+                        {
+                        firstName:{
+                            type:String
+                        },
+                        lastName:{
+                            type:String
+                        },
+                        email:{
+                            type:String
+                        },
+                        rating:{
+                            type:Number
+                        }
+                    });
+
+                3. module.exports = Feedback = mongoose.model("feedback",feedback);
+
+10. Create API folder and inside the API folder create feedbackAPI.js file
+
+11. Inside the feedbackAPI.js file
+
+        1. const express = require('express');
+
+        2. const mongoose = require('mongoose');
+
+        3. const Feedback = require('../DB/feedbackModel');
+
+        4. const route = express.Router();
+
+        5. route.post('/', async(req,res)=>{
+            const{firstName,lastName,email,rating} = req.body;
+            let feedback = {};
+            feedback.firstName = firstName;
+            feedback.lastName = lastName;
+            feedback.email = email;
+            feedback.rating = rating;
+            let feedbackModel = new Feedback(feedback);
+            await feedbackModel.save();
+            res.json(feedbackModel);
+            })
+
+        6. module.exports = route; 
+
+                                       DONE!
+
